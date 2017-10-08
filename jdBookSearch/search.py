@@ -6,6 +6,7 @@ import glob
 import csv
 import cv2
 import os
+import pandas as pd
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--db", required = True,
@@ -22,8 +23,11 @@ db = {}
 
 # create book name to cover file mapping.
 # key is full path of cover image, value is book name
-for line in csv.reader(open(args["db"])):
-    db[line[2]] =line[0]
+# for line in csv.reader(open(args["db"])):
+#     db[line[2]] =line[0]
+book_info_df = pd.read_csv("jdBookData/jdbookexporter.csv")
+for index in book_info_df.index:
+    db[book_info_df.loc[index,"image_location"]] = book_info_df.loc[index,"book_name"]
 
 use_sift = args['sift'] > 0
 use_hamming = args['sift'] == 0
